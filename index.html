@@ -1,290 +1,388 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>График активности умельцев</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
-  <style>
-    /* Сброс и базовые стили */
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-    body {
-      font-family: 'Roboto', sans-serif;
-      background: #f0f2f5;
-      color: #333;
-      line-height: 1.6;
-    }
-    header {
-      background: #fff;
-      padding: 20px;
-      text-align: center;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    header h1 {
-      font-size: 2.5rem;
-      color: #2575fc;
-    }
-    main {
-      max-width: 1200px;
-      margin: 40px auto;
-      padding: 0 20px;
-    }
-    /* Стили секций графика */
-    .graph-section {
-      background: #fff;
-      margin-bottom: 40px;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-      overflow: hidden;
-      /* Начальное состояние для анимации */
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeInUp 1s forwards;
-    }
-    /* Задержка анимации для каждой секции */
-    .graph-section:nth-of-type(1) { animation-delay: 0.2s; }
-    .graph-section:nth-of-type(2) { animation-delay: 0.4s; }
-    .graph-section:nth-of-type(3) { animation-delay: 0.6s; }
-    .graph-section:nth-of-type(4) { animation-delay: 0.8s; }
-    
-    @keyframes fadeInUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
-    .graph-section h2 {
-      margin-bottom: 20px;
-      font-size: 1.8rem;
-      color: #444;
-      border-bottom: 2px solid #e0e0e0;
-      padding-bottom: 10px;
-    }
-    .graph {
-      display: flex;
-      justify-content: space-around;
-      align-items: flex-end;
-      gap: 20px;
-    }
-    .bar {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      flex: 1;
-      max-width: 150px;
-    }
-    .bar-graphic {
-      position: relative;
-      width: 100%;
-      height: 200px;
-      background: #e0e0e0;
-      border-radius: 8px;
-      overflow: hidden;
-      margin-bottom: 10px;
-    }
-    .bar-fill {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 0;
-      background: linear-gradient(45deg, #6a11cb, #2575fc);
-      transition: height 1.5s ease-out;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-    }
-    .bar-text {
-      font-weight: bold;
-      font-size: 1rem;
-      color: #555;
-    }
-    
-    /* Футер */
-    footer {
-      background: #fff;
-      padding: 20px;
-      text-align: center;
-      border-top: 1px solid #e0e0e0;
-      font-size: 0.9rem;
-      color: #777;
-    }
-    footer a {
-      color: #2575fc;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    footer a:hover {
-      text-decoration: underline;
-    }
-    
-    /* Адаптация для мобильных устройств */
-    @media (max-width: 768px) {
-      .graph {
-        flex-direction: column;
-        align-items: center;
-      }
-      .bar {
-        max-width: 80%;
-        margin-bottom: 20px;
-      }
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Корпоративный График Работы | С.Р.У.</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #e0e0e0;
+            --text-main: #000000;
+            --corp-blue: #003eb3;
+            --corp-red: #ff3333;
+            --corp-yellow: #ffcc00;
+            --corp-green: #00cc66;
+            --border-thick: 5px solid #000;
+            --hard-shadow: 10px 10px 0px #000;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Oswald', sans-serif;
+            overflow-x: hidden;
+            /* Строгая миллиметровка на фоне */
+            background-image: 
+                linear-gradient(#000 1px, transparent 1px),
+                linear-gradient(90deg, #000 1px, transparent 1px);
+            background-size: 50px 50px;
+            background-position: -1px -1px;
+        }
+
+        /* Заголовок сайта */
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: var(--corp-yellow);
+            border-bottom: var(--border-thick);
+            border-top: var(--border-thick);
+            margin-top: 50px;
+            margin-bottom: 50px;
+            position: relative;
+            z-index: 10;
+            box-shadow: 0px 15px 0px #000;
+        }
+
+        h1 {
+            font-size: clamp(3rem, 8vw, 7rem);
+            text-transform: uppercase;
+            letter-spacing: -2px;
+            line-height: 1;
+            margin: 0;
+            color: #000;
+            text-shadow: 4px 4px 0px #fff;
+        }
+
+        .header-subtitle {
+            font-family: 'JetBrains Mono', monospace;
+            background: #000;
+            color: #fff;
+            display: inline-block;
+            padding: 5px 15px;
+            font-size: 1.2rem;
+            margin-top: 10px;
+            text-transform: uppercase;
+        }
+
+        /* Контейнер карточек */
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+            gap: 50px;
+        }
+
+        /* Карточки графиков */
+        .card {
+            background: #fff;
+            border: var(--border-thick);
+            box-shadow: var(--hard-shadow);
+            padding: 0; /* Убрал внутренний отступ для жесткой структуры */
+            position: relative;
+            transition: transform 0.1s linear, box-shadow 0.1s linear;
+            opacity: 0;
+            transform: translateY(100px);
+        }
+
+        .card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .card:hover {
+            transform: translate(-5px, -5px);
+            box-shadow: 15px 15px 0px #000;
+        }
+
+        /* Шапка карточки */
+        .card-header {
+            padding: 20px;
+            border-bottom: var(--border-thick);
+        }
+
+        .card:nth-child(1) .card-header { background-color: var(--corp-blue); color: #fff; }
+        .card:nth-child(2) .card-header { background-color: var(--corp-red); color: #fff; }
+        .card:nth-child(3) .card-header { background-color: var(--corp-green); color: #000; }
+        .card:nth-child(4) .card-header { background-color: #000; color: #fff; }
+
+        .card-title {
+            font-size: 2.5rem;
+            line-height: 1.1;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .roles {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1rem;
+            background: #fff;
+            color: #000;
+            padding: 8px 12px;
+            display: inline-block;
+            border: 3px solid #000;
+            box-shadow: 4px 4px 0px #000;
+            font-weight: 700;
+        }
+
+        .card:nth-child(4) .roles { background: var(--corp-yellow); }
+
+        .summary {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.1rem;
+            padding: 15px 20px;
+            background: #f0f0f0;
+            border-bottom: var(--border-thick);
+            text-transform: uppercase;
+            font-weight: 700;
+        }
+
+        /* Список времени */
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            gap: 12px;
+            background: #fff;
+        }
+
+        .time-entry {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 15px;
+            border: 3px solid #000;
+            font-size: 1.2rem;
+            align-items: center;
+            text-transform: uppercase;
+            transition: background 0.1s linear, transform 0.1s linear;
+        }
+
+        .time-entry:hover {
+            transform: translateX(10px);
+            background: #000;
+            color: #fff;
+        }
+
+        .time-entry span:last-child {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.3rem;
+        }
+
+        .start-end {
+            background: #000;
+            color: #fff;
+        }
+
+        .work-item {
+            background: #fff;
+            box-shadow: 4px 4px 0px #000;
+        }
+
+        .break-item {
+            background: repeating-linear-gradient(
+                45deg,
+                var(--corp-yellow),
+                var(--corp-yellow) 10px,
+                #000 10px,
+                #000 20px
+            );
+            color: #fff;
+            text-shadow: 2px 2px 0px #000;
+            box-shadow: 4px 4px 0px #000;
+            border: 3px solid #000;
+        }
+        
+        /* Особый стиль текста для перерыва, чтобы читалось на полосатом фоне */
+        .break-item span {
+            background: #000;
+            padding: 2px 8px;
+        }
+
+        /* Бегущая строка внизу */
+        .marquee-container {
+            width: 100%;
+            background: #000;
+            color: #fff;
+            padding: 20px 0;
+            overflow: hidden;
+            white-space: nowrap;
+            margin-top: 80px;
+            border-top: var(--border-thick);
+            border-bottom: var(--border-thick);
+            font-size: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .marquee-content {
+            display: inline-block;
+            animation: marquee 10s linear infinite;
+        }
+
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Адаптивность для телефонов */
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            .time-entry {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
+            .time-entry span:last-child {
+                align-self: flex-start;
+            }
+            .card:hover {
+                transform: none;
+            }
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <h1>График активности умельцев</h1>
-  </header>
-  
-  <main>
-    <!-- Секция 1: Активность Ивана за четверть -->
-    <section class="graph-section">
-      <h2>Активность Ивана за четверть</h2>
-      <div class="graph">
-        <div class="bar" data-percentage="57">
-          <div class="bar-graphic">
-            <div class="bar-fill"></div>
-          </div>
-          <span class="bar-text">1-2 неделя</span>
+
+    <header>
+        <h1>График работы</h1>
+        <div class="header-subtitle">Система учета рабочего времени</div>
+    </header>
+
+    <div class="container">
+        
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Умелец 1-3 курс</div>
+                <div class="roles">Ученик С.Р.У. | Сотрудник С.Р.У.</div>
+            </div>
+            <div class="summary">Общее время: 03:30:00</div>
+            <div class="timeline">
+                <div class="time-entry start-end"><span>Начало смены</span> <span>12:00</span></div>
+                <div class="time-entry work-item"><span>Работа</span> <span>12:00-12:35</span></div>
+                <div class="time-entry break-item"><span>Перерыв</span> <span>12:35-12:50</span></div>
+                <div class="time-entry work-item"><span>Работа</span> <span>12:50-13:30</span></div>
+                <div class="time-entry work-item"><span>Работа</span> <span>17:45-18:45</span></div>
+                <div class="time-entry break-item"><span>Перерыв</span> <span>18:45-19:00</span></div>
+                <div class="time-entry work-item"><span>Работа</span> <span>19:00-19:35</span></div>
+                <div class="time-entry start-end"><span>Окончание смены</span> <span>19:35</span></div>
+            </div>
         </div>
-        <div class="bar" data-percentage="79">
-          <div class="bar-graphic">
-            <div class="bar-fill"></div>
-          </div>
-          <span class="bar-text">3-4 неделя</span>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Умелец 4-8 курс</div>
+                <div class="roles">Ученик | Сотрудник | Пресс-Сек. | Юрист</div>
+            </div>
+            <div class="summary">Общее время: 05:45:00</div>
+            <div class="timeline">
+                <div class="time-entry start-end"><span>Начало смены</span> <span>12:00</span></div>
+                <div class="time-entry work-item"><span>Работа</span> <span>12:00-13:00</span></div>
+                <div class="time-entry break-item"><span>Перерыв</span> <span>13:00-13:20</span></div>
+                <div class="time-entry work-item"><span>Работа</span> <span>13:20-13:55</span></div>
+                <div class="time-entry break-item"><span>Перерыв</span> <span>13:55-14:10</span></div>
+                <div class="time-entry work-item"><span>Работа</span> <span>14:10-14:45</span></div>
+                <div class="time-entry work-item"><span>Работа</span> <span>19:30-20:15</span></div>
+                <div class="time-entry break-item"><span>Перерыв</span> <span>20:15-20:30</span></div>
+                <div class="time-entry work-item"><span>Работа</span> <span>20:30-21:00</span></div>
+                <div class="time-entry break-item"><span>Перерыв</span> <span>21:00-21:35</span></div>
+                <div class="time-entry work-item"><span>Работа</span> <span>21:35-22:30</span></div>
+                <div class="time-entry start-end"><span>Окончание смены</span> <span>22:30</span></div>
+            </div>
         </div>
-        <div class="bar" data-percentage="61">
-          <div class="bar-graphic">
-            <div class="bar-fill"></div>
-          </div>
-          <span class="bar-text">5-6 неделя</span>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Умелец 9-12 курс</div>
+                <div class="roles">Ученик | Сотрудник | Пресс-Сек. | Юрист</div>
+            </div>
+            <div class="summary">Общее время: 07:15:00</div>
+            <div class="timeline">
+                <div class="time-entry start-end"><span>Начало смены</span> <span>11:00</span></div>
+                <div class="time-entry work-item"><span>Работа</span> <span>11:00-12:15</span></div>
+                <div class="time-entry break-item"><span>Перерыв</span> <span>12:15-12:40</span></div>
+                <div class="time-entry work-item"><span>Работа</span> <span>12:40-13:15</span></div>
+                <div class="time-entry work-item"><span>Работа</span> <span>15:00-15:45</span></div>
+                <div class="time-entry break-item"><span>Перерыв</span> <span>15:45-15:55</span></div>
+                <div class="time-entry work-item"><span>Работа</span> <span>15:55-16:20</span></div>
+                <div class="time-entry break-item"><span>Перерыв</span> <span>16:20-16:30</span></div>
+                <div class="time-entry work-item"><span>Работа</span> <span>16:30-18:00</span></div>
+                <div class="time-entry break-item"><span>Перерыв</span> <span>18:00-18:35</span></div>
+                <div class="time-entry work-item"><span>Работа</span> <span>18:35-19:15</span></div>
+                <div class="time-entry break-item"><span>Перерыв</span> <span>19:15-19:35</span></div>
+                <div class="time-entry start-end"><span>Окончание смены</span> <span>19:35</span></div>
+            </div>
         </div>
-        <div class="bar" data-percentage="94">
-          <div class="bar-graphic">
-            <div class="bar-fill"></div>
-          </div>
-          <span class="bar-text">7-8 неделя</span>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Умелец 1-12 курс</div>
+                <div class="roles">ДОЛЖНОСТЬ: ДИРЕКТОР</div>
+            </div>
+            <div class="summary">Общее время: 07:30:00</div>
+            <div class="timeline">
+                <div class="time-entry start-end"><span>Начало смены</span> <span>11:00</span></div>
+                <div class="time-entry work-item"><span>Работа</span> <span>11:00-11:35</span></div>
+                <div class="time-entry break-item"><span>Перерыв</span> <span>11:35-11:50</span></div>
+                <div class="time-entry work-item"><span>Работа</span> <span>11:50-12:35</span></div>
+                <div class="time-entry break-item"><span>Перерыв</span> <span>12:25-12:35</span></div>
+                <div class="time-entry work-item"><span>Работа</span> <span>12:35-13:10</span></div>
+                <div class="time-entry break-item"><span>Перерыв</span> <span>13:10-13:40</span></div>
+                <div class="time-entry work-item"><span>Работа</span> <span>13:40-14:15</span></div>
+                <div class="time-entry break-item"><span>Перерыв</span> <span>14:15-14:25</span></div>
+                <div class="time-entry work-item"><span>Работа</span> <span>14:25-15:00</span></div>
+                <div class="time-entry break-item"><span>Перерыв</span> <span>15:00-15:15</span></div>
+                <div class="time-entry work-item"><span>Работа</span> <span>15:15-15:50</span></div>
+                <div class="time-entry break-item"><span>Перерыв</span> <span>15:50-16:00</span></div>
+                <div class="time-entry work-item"><span>Работа</span> <span>16:00-16:35</span></div>
+                <div class="time-entry break-item"><span>Перерыв</span> <span>16:35-16:50</span></div>
+                <div class="time-entry work-item"><span>Работа</span> <span>16:50-17:50</span></div>
+                <div class="time-entry break-item"><span>Перерыв</span> <span>17:50-18:00</span></div>
+                <div class="time-entry work-item"><span>Работа</span> <span>18:00-18:25</span></div>
+                <div class="time-entry break-item"><span>Перерыв</span> <span>18:25-18:30</span></div>
+                <div class="time-entry start-end"><span>Окончание смены</span> <span>18:35</span></div>
+            </div>
         </div>
-      </div>
-    </section>
-    
-    <!-- Секция 2: Активность Полины за четверть -->
-    <section class="graph-section">
-      <h2>Активность Полины за четверть</h2>
-      <div class="graph">
-        <div class="bar" data-percentage="33">
-          <div class="bar-graphic">
-            <div class="bar-fill"></div>
-          </div>
-          <span class="bar-text">1-2 неделя</span>
+
+    </div>
+
+    <div class="marquee-container">
+        <div class="marquee-content">
+            РАБОТАЕМ НА РЕЗУЛЬТАТ /// СТРОГАЯ ДИСЦИПЛИНА /// УМЕЛЬЦЫ ВПЕРЕД /// ГРАФИК ПРЕЖДЕ ВСЕГО /// 
+            РАБОТАЕМ НА РЕЗУЛЬТАТ /// СТРОГАЯ ДИСЦИПЛИНА /// УМЕЛЬЦЫ ВПЕРЕД /// ГРАФИК ПРЕЖДЕ ВСЕГО /// 
         </div>
-        <div class="bar" data-percentage="49">
-          <div class="bar-graphic">
-            <div class="bar-fill"></div>
-          </div>
-          <span class="bar-text">3-4 неделя</span>
-        </div>
-        <div class="bar" data-percentage="78">
-          <div class="bar-graphic">
-            <div class="bar-fill"></div>
-          </div>
-          <span class="bar-text">5-6 неделя</span>
-        </div>
-        <div class="bar" data-percentage="9">
-          <div class="bar-graphic">
-            <div class="bar-fill"></div>
-          </div>
-          <span class="bar-text">7-8 неделя</span>
-        </div>
-      </div>
-    </section>
-    
-    <!-- Секция 3: Активность Галины за четверть -->
-    <section class="graph-section">
-      <h2>Активность Галины за четверть</h2>
-      <div class="graph">
-        <div class="bar" data-percentage="60">
-          <div class="bar-graphic">
-            <div class="bar-fill"></div>
-          </div>
-          <span class="bar-text">1-2 неделя</span>
-        </div>
-        <div class="bar" data-percentage="21">
-          <div class="bar-graphic">
-            <div class="bar-fill"></div>
-          </div>
-          <span class="bar-text">3-4 неделя</span>
-        </div>
-        <div class="bar" data-percentage="12">
-          <div class="bar-graphic">
-            <div class="bar-fill"></div>
-          </div>
-          <span class="bar-text">5-6 неделя</span>
-        </div>
-        <div class="bar" data-percentage="37">
-          <div class="bar-graphic">
-            <div class="bar-fill"></div>
-          </div>
-          <span class="bar-text">7-8 неделя</span>
-        </div>
-      </div>
-    </section>
-    
-    <!-- Секция 4: Четвертый раздел -->
-    <section class="graph-section">
-      <h2>Активность Глеба за четверть</h2>
-      <div class="graph">
-        <div class="bar" data-percentage="10">
-          <div class="bar-graphic">
-            <div class="bar-fill"></div>
-          </div>
-          <span class="bar-text">1-2 неделя</span>
-        </div>
-        <div class="bar" data-percentage="19">
-          <div class="bar-graphic">
-            <div class="bar-fill"></div>
-          </div>
-          <span class="bar-text">3-4 неделя</span>
-        </div>
-        <div class="bar" data-percentage="73">
-          <div class="bar-graphic">
-            <div class="bar-fill"></div>
-          </div>
-          <span class="bar-text">5-6 неделя</span>
-        </div>
-        <div class="bar" data-percentage="58">
-          <div class="bar-graphic">
-            <div class="bar-fill"></div>
-          </div>
-          <span class="bar-text">7-8 неделя</span>
-        </div>
-      </div>
-    </section>
-    
-  </main>
-  
-  <footer>
-    <p>© Vertex Dynamics 2025, Inc. SRU 2024-2025. Все права защищены.</p>
-    <p>Электронная почта для связи: <a href="mailto:communityofdevelopingcraftsmen@gmail.com">communityofdevelopingcraftsmen@gmail.com</a></p>
-  </footer>
-  
-  <script>
-    // Анимация заполнения столбцов по заданной высоте из data-percentage
-    document.addEventListener('DOMContentLoaded', function() {
-      const bars = document.querySelectorAll('.bar');
-      bars.forEach((bar, index) => {
-        const percentage = bar.getAttribute('data-percentage');
-        const barFill = bar.querySelector('.bar-fill');
-        // Задержка для ступенчатой анимации столбцов
-        setTimeout(() => {
-          barFill.style.height = percentage + '%';
-        }, 200 * index);
-      });
-    });
-  </script>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cards = document.querySelectorAll('.card');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry, index) => {
+                    if (entry.isIntersecting) {
+                        // Резкое появление с небольшой задержкой
+                        setTimeout(() => {
+                            entry.target.classList.add('visible');
+                        }, index * 100);
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            cards.forEach(card => {
+                observer.observe(card);
+            });
+        });
+    </script>
 </body>
 </html>
